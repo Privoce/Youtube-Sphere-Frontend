@@ -1,7 +1,7 @@
 {
   "name": "Infra - YouTube Social Network",
   "description": "React to and share YouTube video within your own social network",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "manifest_version": 3,
   "permissions": [
     "storage",
@@ -27,9 +27,8 @@
   },
   "content_scripts": [
     {
-      "matches": ["*://*.youtube.com/*"],
+      "matches": ["*://*.youtube.com/*", "*://ec2-18-163-182-223.ap-east-1.compute.amazonaws.com/*"],
       "js": ["static/js/content.js"],
-      "css": ["static/css/content.css"],
       "run_at": "document_end"
     }
   ]  
