@@ -1,11 +1,10 @@
 import axios from 'axios';
 
-const baseURL = "http://ec2-18-166-42-129.ap-east-1.compute.amazonaws.com:3000/";
+const baseURL = "https://social.qmcurtis.me/api/";
 const config = {
     method: 'post',
     baseURL: baseURL,
     timeout: 36000,
-    headers: {'X-Requested-With': 'XMLHttpRequest'},
     responseType: 'json'
 };
 
@@ -33,12 +32,14 @@ export function createRelation(requestStarterUUID, requestOriginUUID, starterTok
 }
 export function getFriendsList(uuid, token) {
     let localConfig = Object.assign({}, config, {
-        data: {
+        params: {
             uuid: uuid,
             id_token: token,
+            depth: 0,
         },
-        url: '/friend-list'
+        url: '/user/connect/'
     });
+    localConfig.method = 'get'
     console.log(localConfig);
     return axios.request(localConfig);
 }

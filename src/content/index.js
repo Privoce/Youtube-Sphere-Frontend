@@ -26,7 +26,7 @@ function ButtonDiv() {
     return (
         <>
             <SearchButton />
-
+            <FriendsButton />
         </>
     )
 }
