@@ -54,3 +54,14 @@ export function searchAccount(text) {
     console.log(localConfig);
     return axios.request(localConfig);
 }
+export function getFriendLiked(userId){
+    let localConfig = Object.assign({}, config, {
+        params: {
+            userId:userId
+        },
+        url: '/video'
+    });
+    console.log(localConfig);
+    localConfig.method = 'get'
+    return axios.request(localConfig);
+}

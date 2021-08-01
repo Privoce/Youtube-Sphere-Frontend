@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import {infraEvent} from "@/lib/helper";
 import FriendsButton from "../lib/FriendsButton";
 import SearchButton from "../lib/SearchButton";
+import FriendsLikedBar from "../lib/FriendsLikedBar";
 
 function mockServerSync(user) {
     console.log('mock', user);
@@ -30,6 +31,13 @@ function ButtonDiv() {
         </>
     )
 }
+
+let likedBar=document.createElement('div')
+likedBar.id="likedBar"
+likedBar.className="likedBar"
+document.querySelector("ytd-rich-grid-renderer").insertBefore(likedBar,document.getElementById("contents"));
+likedBar.style.width="92%"
+ReactDOM.render(<FriendsLikedBar/>,likedBar)
 
 // eslint-disable-next-line no-restricted-globals
 if (location.href.indexOf('youtube') !== -1) {
