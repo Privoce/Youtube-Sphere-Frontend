@@ -53,31 +53,38 @@ export default function FriendsLikedBar() {
 
     useEffect(() => {
         console.log("useEffect start")
-        chrome.storage.local.get(["infraUser"], (result) => {
-            const currUser = result.infraUser;
-            // if (!currUser) {
-            //     // eslint-disable-next-line no-restricted-globals
-            //     if(confirm("You are not logged in. Log in first?")) {
-            //         chrome.runtime.sendMessage("externalLogin");
-            //     }
-            //     return;
-            // }
-            if (currUser) {
-                getFriendLiked(currUser.id).then((response) => {
-                    console.log(response.data.friendsLiked);
-                    if (response.data.friendsLiked) {
-                        console.log(response.data.friendsLiked)
-                        setLiked(response.data.friendsLiked);
-                        setLiked(prevLiked => {
-                            return prevLiked;
-                        })
-                        // return response.data.friendsLiked;
-                    }
-                    console.log(liked)
-                }).catch((err) => {
-                    console.log("axios err at getFriendsList", err);
-                })
+        // chrome.storage.local.get(["infraUser"], (result) => {
+        //     const currUser = result.infraUser;
+        //     // if (!currUser) {
+        //     //     // eslint-disable-next-line no-restricted-globals
+        //     //     if(confirm("You are not logged in. Log in first?")) {
+        //     //         chrome.runtime.sendMessage("externalLogin");
+        //     //     }
+        //     //     return;
+        //     // }
+        //     if (currUser) {
+        //         //获取好友喜欢的列表
+        //         getFriendLiked("id0").then((response) => {
+        //             console.log(response.data);
+        //             if (response.data) {
+        //                 console.log(response.data)
+        //                 setLiked(response.data);
+        //                 // return response.data.friendsLiked;
+        //             }
+        //             console.log(liked)
+        //         }).catch((err) => {
+        //             console.log("axios err at getFriendsList", err);
+        //         })
+        //     }
+        // })
+        getFriendLiked("id0").then((response) => {
+            if (response.data) {
+                setLiked(response.data);
+                // return response.data.friendsLiked;
             }
+            console.log(liked)
+        }).catch((err) => {
+            console.log("axios err at getFriendsList", err);
         })
     }, [])
 
@@ -86,9 +93,9 @@ export default function FriendsLikedBar() {
             <div className={classes.root}>
                 <ImageList className={classes.imageList} cols={3} rowHeight={180}>
                     {liked.map((item) => (
-                        <ImageListItem key={item.videoInfo.thumnail} >
-                            <a href={"https://www.youtube.com/watch?v=" + item.videoInfo.videoId} target="_blank">
-                                <img src={item.videoInfo.thumbnail} alt={item.videoInfo.title} className={classes.img}/>
+                        <ImageListItem key={item.videoId} >
+                            <a href={"https://www.youtube.com/watch?v=" + item.videoId} target="_blank">
+                                <img src={item.videoThumbnail} alt={item.videoTitle} className={classes.img}/>
                             </a>
                             {/*<ImageListItemBar*/}
                             {/*    title={item.videoInfo.title}*/}

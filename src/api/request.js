@@ -62,7 +62,7 @@ export function getFriendLiked(userId){
         params: {
             userId:userId
         },
-        url: '/video'
+        url: '/user/connect/liked'
     });
     console.log(localConfig);
     localConfig.method = 'get'
