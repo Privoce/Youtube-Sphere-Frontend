@@ -8,33 +8,36 @@ const config = {
     responseType: 'json'
 };
 
-export function createUserRequest(uuid, token) {
+export function createUserRequest(uuid, nickname='') {
     let localConfig = Object.assign({}, config, {
         data: {
-            uuid: uuid,
-            id_token: token,
+            userId: uuid,
+            nickname: nickname,
+            liked: ""
         },
-        url: '/register'
+        url: '/user'
     });
     return axios.request(localConfig);
 }
-export function createRelation(requestStarterUUID, requestOriginUUID, starterToken) {
+export function createRelation(requestStarterUUID, requestOriginUUID) {
     let localConfig = Object.assign({}, config, {
         data: {
-            firstID: requestStarterUUID,
-            secondID: requestOriginUUID,
-            id_token: starterToken,
+            userId: requestStarterUUID,
+            users: [
+                requestOriginUUID
+            ],
+            platform: 'youtube'
         },
-        url: '/create-relation'
+        url: '/user/connect'
     });
+    localConfig.baseURL = "https://aws.nicegoodthings.com/"
     console.log(localConfig);
     return axios.request(localConfig);
 }
-export function getFriendsList(uuid, token) {
+export function getFriendsList(uuid) {
     let localConfig = Object.assign({}, config, {
         params: {
-            uuid: uuid,
-            id_token: token,
+            userId: uuid,
             depth: 0,
         },
         url: '/user/connect/'
@@ -63,5 +66,19 @@ export function getFriendLiked(userId){
     });
     console.log(localConfig);
     localConfig.method = 'get'
+    return axios.request(localConfig);
+}
+export function reactionToVideo(uuid, url, reactionType='like', timeStamp, dateTime, keepPrivate) {
+    let localConfig = Object.assign({}, config, {
+        data: {
+            userId: uuid,
+            url: url,
+            reaction: reactionType,
+            timeStamp: timeStamp,
+            dateTime: dateTime,
+            keepPrivate: keepPrivate,
+        },
+        url: '/reaction'
+    });
     return axios.request(localConfig);
 }

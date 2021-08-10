@@ -5,6 +5,7 @@ import {infraEvent} from "@/lib/helper";
 import FriendsButton from "../lib/FriendsButton";
 import SearchButton from "../lib/SearchButton";
 import FriendsLikedBar from "../lib/FriendsLikedBar";
+import ReactionButton from "../lib/ReactionButton";
 
 function mockServerSync(user) {
     console.log('mock', user);
@@ -14,10 +15,7 @@ function mockServerSync(user) {
 function SharingButton() {
     // generating invitation link and popup
 }
-function ReactionButton() {
-    // now: like this video, record url, timestamp, reactionType, (upload to personal server)\
-    // TODO: extend reaction type, cancelling
-}
+
 function SocialToolBar() {
     // abstract div
 }
@@ -28,6 +26,7 @@ function ButtonDiv() {
         <>
             <SearchButton />
             <FriendsButton />
+            <ReactionButton />
         </>
     )
 }

@@ -16,6 +16,7 @@ import {
 } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 import AccountSearchBar from "./AccountSearchBar";
+import {createRelation} from "../api/request";
 
 
 export default function SearchButton() {
@@ -48,13 +49,32 @@ export default function SearchButton() {
         })
     }
 
+    const connectUser = (uuid) => {
+        chrome.storage.local.get(["infraUser"], (result) => {
+            const currUser = result.infraUser;
+            createRelation(currUser.id, uuid).then((response) => {
+                if (response.status == 200) {
+                    return response.data
+                }
+            }).then((response) => {
+                if (response.status == 1) {
+                    alert("Adding Friend Successfully!");
+                } else {
+                    alert(response.errMsg);
+                }
+            }).catch((err) => {
+                console.log("add friend fatal error, ", err);
+            })
+        })
+    }
+
     const renderDialog = () => {
         return (
             <List style={{width: '100%'}}>
                 {(result||[]).map((friend) => {
-                    const {username, phone, email, photo} = friend;
+                    const {username, phone, email, photo, id} = friend;
                     return (
-                        <ListItem alignItems="flex-start">
+                        <ListItem alignItems="flex-start" onClick={connectUser(id)} button>
                             <ListItemAvatar>
                                 <Avatar alt={username} src={photo}/>
                             </ListItemAvatar>
@@ -86,7 +106,7 @@ export default function SearchButton() {
 
     return (
         <div>
-            <IconButton onClick={toggleDialog} style={{position: "fixed", right: "80px", bottom: "50px", zIndex: 996}}>
+            <IconButton onClick={toggleDialog} style={{position: "fixed", right: "100px", bottom: "50px", zIndex: 996}}>
                 <SearchIcon />
             </IconButton>
             <Dialog

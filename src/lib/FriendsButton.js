@@ -78,11 +78,14 @@ export default function FriendsButton() {
                 return;
             }
             if (currUser && !open) {
-                getFriendsList(currUser.id, currUser.token).then((response) => {
-                    return response.json();
+                getFriendsList(currUser.id).then((response) => {
+                    if (response.status == 200) {
+                        return response.data;
+                    }
                 }).then((response) => {
-                    if (response.friends) {
-                        setFriends(response.friends);
+                    if (response.status == 1) {
+                        setFriends(response.users);
+                        console.log("friends fetched.")
                     }
                 }).catch((err) => {
                     console.log("axios err at getFriendsList", err);
@@ -98,14 +101,15 @@ export default function FriendsButton() {
             friends ?
                 <List>
                     {friends.map((friend) => {
-                        const {username, phone, email, photo} = friend;
+                        // const {username, phone, email, photo} = friend;
+                        const {nickname, phone, email, photo} = friend;
                         return (
                                 <ListItem alignItems="flex-start">
                                     <ListItemAvatar>
-                                        <Avatar alt={username} src={photo}/>
+                                        <Avatar alt={nickname} src={photo}/>
                                     </ListItemAvatar>
                                     <ListItemText
-                                        primary={username || 'NONAME'}
+                                        primary={nickname || 'NONAME'}
                                         secondary={
                                             <>
                                                 {phone && (
