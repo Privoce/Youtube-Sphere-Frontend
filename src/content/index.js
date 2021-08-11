@@ -31,15 +31,17 @@ function ButtonDiv() {
     )
 }
 
-let likedBar=document.createElement('div')
-likedBar.id="likedBar"
-likedBar.className="likedBar"
-document.querySelector("ytd-rich-grid-renderer").insertBefore(likedBar,document.getElementById("contents"));
-likedBar.style.width="92%"
-ReactDOM.render(<FriendsLikedBar/>,likedBar)
+
 
 // eslint-disable-next-line no-restricted-globals
 if (location.href.indexOf('youtube') !== -1) {
+    let likedBar=document.createElement('div')
+    likedBar.id="likedBar"
+    likedBar.className="likedBar"
+    document.querySelector("ytd-rich-grid-renderer").insertBefore(likedBar,document.getElementById("contents"));
+    likedBar.style.width="92%"
+    ReactDOM.render(<FriendsLikedBar/>,likedBar)
+
     let floaterDiv = document.createElement("div");
     floaterDiv.id = "infra-full-container";
     document.querySelector("body").appendChild(floaterDiv);
