@@ -51,7 +51,7 @@ export function searchAccount(text) {
         params: {
             keyword: text,
         },
-        url: '/search'
+        url: '/authing/search'
     });
     localConfig.method = 'get';
     console.log(localConfig);
@@ -68,17 +68,17 @@ export function getFriendLiked(userId){
     localConfig.method = 'get'
     return axios.request(localConfig);
 }
-export function reactionToVideo(uuid, url, reactionType='like', timeStamp, dateTime, keepPrivate) {
+export function reactionToVideo(uuid, url, reactionType='like', timeStamp, keepPrivate) {
     let localConfig = Object.assign({}, config, {
         data: {
             userId: uuid,
             url: url,
             reaction: reactionType,
             timeStamp: timeStamp,
-            dateTime: dateTime,
             keepPrivate: keepPrivate,
         },
         url: '/reaction'
     });
+    localConfig.method='post'
     return axios.request(localConfig);
 }
