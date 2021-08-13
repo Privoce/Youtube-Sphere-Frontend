@@ -63,7 +63,7 @@ export default function FriendsLikedBar() {
                                         title={item.videoTitle}
                                     />
                                     <CardContent className={classes.content}>
-                                        <Typography gutterBottom variant="h5" component="h2">
+                                        <Typography gutterBottom variant="h5" component="h2" noWrap>
                                             {item.videoTitle}
                                         </Typography>
                                         <Typography variant="body2" color="textSecondary" component="p">

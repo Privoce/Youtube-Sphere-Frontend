@@ -6,6 +6,7 @@ import FriendsButton from "../lib/FriendsButton";
 import SearchButton from "../lib/SearchButton";
 import FriendsLikedBar from "../lib/FriendsLikedBar";
 import ReactionButton from "../lib/ReactionButton";
+import GuideSidebar from "../lib/GuideSidebar"
 
 function mockServerSync(user) {
     console.log('mock', user);
@@ -40,7 +41,13 @@ if (location.href.indexOf('youtube') !== -1) {
     likedBar.className="likedBar"
     document.querySelector("ytd-rich-grid-renderer").insertBefore(likedBar,document.getElementById("contents"));
     likedBar.style.width="92%"
+    likedBar.style.marginLeft="2vw"
     ReactDOM.render(<FriendsLikedBar/>,likedBar)
+
+    // let guideSidebar=document.createElement('div')
+    // guideSidebar.id="guideSidebar"
+    // document.getElementById("sections").insertBefore(guideSidebar,document.querySelector("#sections > ytd-guide-section-renderer:nth-child(2)"));
+    // ReactDOM.render(<GuideSidebar/>,guideSidebar)
 
     let floaterDiv = document.createElement("div");
     floaterDiv.id = "infra-full-container";
