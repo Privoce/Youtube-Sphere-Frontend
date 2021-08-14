@@ -50,9 +50,11 @@ export default function SearchButton() {
     }
 
     const connectUser = (uuid) => {
+        console.log(uuid)
         chrome.storage.local.get(["infraUser"], (result) => {
             const currUser = result.infraUser;
             createRelation(currUser.id, uuid).then((response) => {
+                console.log(response)
                 if (response.status == 200) {
                     return response.data
                 }
@@ -66,6 +68,7 @@ export default function SearchButton() {
                 console.log("add friend fatal error, ", err);
             })
         })
+
     }
 
     const renderDialog = () => {
@@ -74,7 +77,7 @@ export default function SearchButton() {
                 {(result||[]).map((friend) => {
                     const {username, phone, email, photo, id} = friend;
                     return (
-                        <ListItem alignItems="flex-start" onClick={connectUser(id)} button>
+                        <ListItem alignItems="flex-start" onClick={connectUser.bind(this,id)} button>
                             <ListItemAvatar>
                                 <Avatar alt={username} src={photo}/>
                             </ListItemAvatar>

@@ -1,49 +1,15 @@
 /* global chrome */
-import React, {useEffect, useState, useLayoutEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
-import ImageList from '@material-ui/core/ImageList';
-import ImageListItem from '@material-ui/core/ImageListItem';
-import ImageListItemBar from '@material-ui/core/ImageListItemBar';
-import IconButton from "@material-ui/core/IconButton";
-import StarBorderIcon from '@material-ui/icons/StarBorder';
+import {Card, CardActionArea, CardActions, CardContent, CardMedia,Grid} from "@material-ui/core";
 import {getFriendLiked} from "../api/request"
 import {Typography} from "@material-ui/core";
 
 let useStyles = makeStyles((theme) => ({
     root: {
-        display: 'flex',
-        flexWrap: 'wrap',
-        justifyContent: 'space-around',
-        overflow: 'hidden',
-        backgroundColor: theme.palette.background.paper,
-        width: "100%",
-        // objectFit:"contain",
-        zIndex: 300,
-        padding: 0,
+        maxWidth: 320,
     },
-    imageList: {
-        flexWrap: 'nowrap',
-        // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
-        transform: 'translateZ(0)',
-        width: "100%",
-    },
-    title: {
-        // color: theme.palette.primary.light,
-        // color:"black"
-    },
-
-    titleBar: {
-        zIndex: 3000,
-        width: "40%",
-        height: 184
-        // background:
-        //     'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
-    },
-    imgFullHeight: {
-        height: 320,
-    },
-    imgFullWidth: {
-        width: 320,
+    content:{
     }
 }));
 
@@ -55,22 +21,18 @@ export default function FriendsLikedBar() {
         console.log("useEffect start")
         chrome.storage.local.get(["infraUser"], (result) => {
             const currUser = result.infraUser;
-            // if (!currUser) {
-            //     // eslint-disable-next-line no-restricted-globals
-            //     if(confirm("You are not logged in. Log in first?")) {
-            //         chrome.runtime.sendMessage("externalLogin");
-            //     }
-            //     return;
-            // }
+            if (!currUser) {
+                // eslint-disable-next-line no-restricted-globals
+                if(confirm("You are not logged in. Log in first?")) {
+                    chrome.runtime.sendMessage("externalLogin");
+                }
+                return;
+            }
             if (currUser) {
+                //获取好友喜欢的列表
                 getFriendLiked(currUser.id).then((response) => {
-                    console.log(response.data.friendsLiked);
-                    if (response.data.friendsLiked) {
-                        console.log(response.data.friendsLiked)
-                        setLiked(response.data.friendsLiked);
-                        setLiked(prevLiked => {
-                            return prevLiked;
-                        })
+                    if (response.data) {
+                        setLiked(response.data);
                         // return response.data.friendsLiked;
                     }
                     console.log(liked)
@@ -81,32 +43,39 @@ export default function FriendsLikedBar() {
         })
     }, [])
 
+    const handleClick =(event)=>{
+        window.open("https://www.youtube.com/watch?v=u6gIDiOeTHc","_blank")
+    }
+
     return (
         liked ?
-            <div className={classes.root}>
-                <ImageList className={classes.imageList} cols={3} rowHeight={180}>
-                    {liked.map((item) => (
-                        <ImageListItem key={item.videoInfo.thumnail} >
-                            <a href={"https://www.youtube.com/watch?v=" + item.videoInfo.videoId} target="_blank">
-                                <img src={item.videoInfo.thumbnail} alt={item.videoInfo.title} className={classes.img}/>
-                            </a>
-                            {/*<ImageListItemBar*/}
-                            {/*    title={item.videoInfo.title}*/}
-                            {/*    subtitle={<span>liked by: {item.nickname}</span>}*/}
-                            {/*    classes={{*/}
-                            {/*        root: classes.titleBar,*/}
-                            {/*        title: classes.title,*/}
-                            {/*    }}*/}
-                            {/*    actionIcon={*/}
-                            {/*        <IconButton aria-label={`star ${item.videoInfo.title}`}>*/}
-                            {/*            <StarBorderIcon className={classes.title}/>*/}
-                            {/*        </IconButton>*/}
-                            {/*    }*/}
-                            {/*/>*/}
-                        </ImageListItem>
-                    ))}
-                </ImageList>
-            </div> :
+            <Grid container direction="row" alignItems="center" justifyContent="flex-start" spacing={4}>
+                {
+                    liked.map((item)=>(
+                        <Grid item>
+                            <Card className={classes.root}>
+                                <CardActionArea onClick={handleClick}>
+                                    <CardMedia
+                                        component="img"
+                                        alt="Contemplative Reptile"
+                                        height="170"
+                                        image={item.videoThumbnail}
+                                        title={item.videoTitle}
+                                    />
+                                    <CardContent className={classes.content}>
+                                        <Typography gutterBottom variant="h5" component="h2" noWrap>
+                                            {item.videoTitle}
+                                        </Typography>
+                                        <Typography variant="body2" color="textSecondary" component="p">
+                                            liked by: {<Typography variant="subtitle2">{item.nickname.toString()}</Typography>}
+                                        </Typography>
+                                    </CardContent>
+                                </CardActionArea>
+                            </Card>
+                        </Grid>
+                    ))
+                }
+            </Grid> :
             <Typography variant="body1">no friends info</Typography>
     )
 }

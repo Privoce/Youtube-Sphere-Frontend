@@ -1,7 +1,7 @@
 {
   "name": "Infra - YouTube Social Network",
   "description": "React to and share YouTube video within your own social network",
-  "version": "0.1.4",
+  "version": "0.2.1",
   "manifest_version": 3,
   "permissions": [
     "storage",

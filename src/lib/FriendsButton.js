@@ -53,7 +53,6 @@ export default function FriendsButton() {
                 }
             })
         })
-        console.log("mounted");
         chrome.storage.local.get(["infraUser"], (result) => {
             if (result.infraUser) {
                 setUser(result.infraUser)
@@ -61,6 +60,7 @@ export default function FriendsButton() {
                 setUser(null)
             }
         })
+        console.log("mounted"+user);
         return (() => {
             infraEvent.removeListener(statusChangeHandler)
         })

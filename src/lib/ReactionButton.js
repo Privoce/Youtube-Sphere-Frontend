@@ -1,3 +1,4 @@
+/* global chrome */
 import React, {useState, useEffect} from "react";
 import {IconButton, Popover, ButtonGroup, Button, Icon} from "@material-ui/core";
 import WifiTetheringIcon from '@material-ui/icons/WifiTethering';
@@ -6,6 +7,7 @@ import ThumbDownIcon from "@material-ui/icons/ThumbDown";
 import SentimentVeryDissatisfiedIcon from '@material-ui/icons/SentimentVeryDissatisfied';
 import SentimentVerySatisfiedIcon from '@material-ui/icons/SentimentVerySatisfied';
 import {makeStyles} from "@material-ui/core/styles";
+import {getFriendLiked, reactionToVideo} from "../api/request";
 
 const useStyle = makeStyles((theme) => ({
     popover: {
@@ -32,6 +34,27 @@ export default function ReactionButton() {
     }
     const continuePopover = () => {
         setOpen(true);
+    }
+
+    const handleLike = (event)=>{
+        let url=window.location.href
+        if (url.indexOf("watch")!==-1){
+            chrome.storage.local.get(["infraUser"], (result) => {
+                const currUser = result.infraUser;
+                if (!currUser) {
+                    // eslint-disable-next-line no-restricted-globals
+                    if(confirm("You are not logged in. Log in first?")) {
+                        chrome.runtime.sendMessage("externalLogin");
+                    }
+                    return;
+                }
+                if (currUser) {
+                    reactionToVideo(currUser.id,window.location.href,"like",0,0).then((response)=>{
+                        console.log(response)
+                    })
+                }
+            })
+        }
     }
 
 
@@ -66,7 +89,7 @@ export default function ReactionButton() {
                 onClose={togglePopoverOff}
             >
                 <ButtonGroup>
-                    <IconButton children={<ThumbUpIcon />}/>
+                    <IconButton children={<ThumbUpIcon />} onClick={handleLike}/>
                     <IconButton children={<ThumbDownIcon />}/>
                     <IconButton children={<SentimentVerySatisfiedIcon />}/>
                     <IconButton children={<SentimentVeryDissatisfiedIcon />}/>
