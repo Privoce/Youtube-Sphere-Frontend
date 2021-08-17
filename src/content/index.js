@@ -6,7 +6,7 @@ import FriendsButton from "../lib/FriendsButton";
 import SearchButton from "../lib/SearchButton";
 import FriendsLikedBar from "../lib/FriendsLikedBar";
 import ReactionButton from "../lib/ReactionButton";
-import GuideSidebar from "../lib/GuideSidebar"
+import ButtonBar from "../lib/ButtonBar";
 
 function mockServerSync(user) {
     console.log('mock', user);
@@ -22,15 +22,15 @@ function SocialToolBar() {
 }
 console.log("before");
 
-function ButtonDiv() {
-    return (
-        <>
-            <SearchButton />
-            <FriendsButton />
-            <ReactionButton />
-        </>
-    )
-}
+// function ButtonDiv() {
+//     return (
+//         <>
+//             <SearchButton />
+//             <FriendsButton />
+//             <ReactionButton />
+//         </>
+//     )
+// }
 
 
 
@@ -44,15 +44,16 @@ if (location.href.indexOf('youtube') !== -1) {
     likedBar.style.marginLeft="2vw"
     ReactDOM.render(<FriendsLikedBar/>,likedBar)
 
-    // let guideSidebar=document.createElement('div')
-    // guideSidebar.id="guideSidebar"
-    // document.getElementById("sections").insertBefore(guideSidebar,document.querySelector("#sections > ytd-guide-section-renderer:nth-child(2)"));
-    // ReactDOM.render(<GuideSidebar/>,guideSidebar)
 
-    let floaterDiv = document.createElement("div");
-    floaterDiv.id = "infra-full-container";
-    document.querySelector("body").appendChild(floaterDiv);
-    ReactDOM.render(<ButtonDiv />, document.querySelector("#infra-full-container"));
+    let buttonBar=document.createElement('div')
+    buttonBar.id='buttonBar'
+    document.getElementById("end").insertBefore(buttonBar,document.getElementById("buttons"))
+    ReactDOM.render(<ButtonBar/>,buttonBar)
+
+    // let floaterDiv = document.createElement("div");
+    // floaterDiv.id = "infra-full-container";
+    // document.querySelector("body").appendChild(floaterDiv);
+    // ReactDOM.render(<ButtonDiv />, document.querySelector("#infra-full-container"));
 }
 
 
