@@ -43,8 +43,8 @@ export default function FriendsLikedBar() {
         })
     }, [])
 
-    const handleClick =(event)=>{
-        window.open("https://www.youtube.com/watch?v=u6gIDiOeTHc","_blank")
+    const handleClick =(url)=>{
+        window.open(url,"_self")
     }
 
     return (
@@ -54,7 +54,7 @@ export default function FriendsLikedBar() {
                     liked.map((item)=>(
                         <Grid item>
                             <Card className={classes.root}>
-                                <CardActionArea onClick={handleClick}>
+                                <CardActionArea onClick={handleClick.bind(this,item.videoUrl)}>
                                     <CardMedia
                                         component="img"
                                         alt="Contemplative Reptile"
