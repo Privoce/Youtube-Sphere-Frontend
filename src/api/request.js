@@ -38,9 +38,8 @@ export function getFriendsList(uuid) {
     let localConfig = Object.assign({}, config, {
         params: {
             userId: uuid,
-            depth: 0,
         },
-        url: '/user/connect/'
+        url: '/authing/connect/'
     });
     localConfig.method = 'get'
     console.log(localConfig);

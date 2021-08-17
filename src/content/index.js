@@ -6,7 +6,8 @@ import FriendsButton from "../lib/FriendsButton";
 import SearchButton from "../lib/SearchButton";
 import FriendsLikedBar from "../lib/FriendsLikedBar";
 import ReactionButton from "../lib/ReactionButton";
-import GuideSidebar from "../lib/GuideSidebar"
+import ButtonBar from "../lib/ButtonBar";
+
 
 function ButtonDiv() {
     return (
@@ -37,10 +38,15 @@ if (location.href.indexOf('youtube') !== -1) {
         }
     }
 
-    let floaterDiv = document.createElement("div");
-    floaterDiv.id = "infra-full-container";
-    document.querySelector("body").appendChild(floaterDiv);
-    ReactDOM.render(<ButtonDiv />, document.querySelector("#infra-full-container"));
+    let buttonBar=document.createElement('div')
+    buttonBar.id='buttonBar'
+    document.getElementById("end").insertBefore(buttonBar,document.getElementById("buttons"))
+    ReactDOM.render(<ButtonBar/>,buttonBar)
+
+    // let floaterDiv = document.createElement("div");
+    // floaterDiv.id = "infra-full-container";
+    // document.querySelector("body").appendChild(floaterDiv);
+    // ReactDOM.render(<ButtonDiv />, document.querySelector("#infra-full-container"));
 }
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {

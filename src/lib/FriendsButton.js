@@ -79,7 +79,6 @@ export default function FriendsButton() {
             }
             if (currUser && !open) {
                 getFriendsList(currUser.id).then((response) => {
-                    console.log(response)
                     if (response.status == 200) {
                         return response.data;
                     }
@@ -102,15 +101,14 @@ export default function FriendsButton() {
             friends ?
                 <List>
                     {friends.map((friend) => {
-                        // const {username, phone, email, photo} = friend;
-                        const {nickname, phone, email, photo} = friend;
+                        const {username,nickname, phone, email, photo} = friend;
                         return (
                                 <ListItem alignItems="flex-start">
                                     <ListItemAvatar>
-                                        <Avatar alt={nickname} src={photo}/>
+                                        <Avatar alt={nickname || username} src={photo}/>
                                     </ListItemAvatar>
                                     <ListItemText
-                                        primary={nickname || 'NONAME'}
+                                        primary={nickname || username}
                                         secondary={
                                             <>
                                                 {phone && (
