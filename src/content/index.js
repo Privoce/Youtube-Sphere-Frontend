@@ -8,42 +8,35 @@ import FriendsLikedBar from "../lib/FriendsLikedBar";
 import ReactionButton from "../lib/ReactionButton";
 import ButtonBar from "../lib/ButtonBar";
 
-function mockServerSync(user) {
-    console.log('mock', user);
+
+function ButtonDiv() {
+    return (
+        <>
+            <SearchButton />
+            <FriendsButton />
+            <ReactionButton />
+        </>
+    )
 }
 
-
-function SharingButton() {
-    // generating invitation link and popup
-}
-
-function SocialToolBar() {
-    // abstract div
-}
-console.log("before");
-
-// function ButtonDiv() {
-//     return (
-//         <>
-//             <SearchButton />
-//             <FriendsButton />
-//             <ReactionButton />
-//         </>
-//     )
-// }
-
+let likedBarInjectionFlag = false;
 
 
 // eslint-disable-next-line no-restricted-globals
 if (location.href.indexOf('youtube') !== -1) {
-    let likedBar=document.createElement('div')
-    likedBar.id="likedBar"
-    likedBar.className="likedBar"
-    document.querySelector("ytd-rich-grid-renderer").insertBefore(likedBar,document.getElementById("contents"));
-    likedBar.style.width="92%"
-    likedBar.style.marginLeft="2vw"
-    ReactDOM.render(<FriendsLikedBar/>,likedBar)
-
+    if (!likedBarInjectionFlag) {
+        console.log("first try");
+        if (document.querySelector("ytd-rich-grid-renderer")) {
+            let likedBar=document.createElement('div');
+            likedBar.id="likedBar";
+            likedBar.className="likedBar";
+            document.querySelector("ytd-rich-grid-renderer").insertBefore(likedBar,document.querySelector(".ytd-rich-grid-renderer #contents"));
+            likedBar.style.width="92%";
+            likedBar.style.marginLeft="2vw";
+            ReactDOM.render(<FriendsLikedBar/>, likedBar);
+            likedBarInjectionFlag = true;
+        }
+    }
 
     let buttonBar=document.createElement('div')
     buttonBar.id='buttonBar'
@@ -56,7 +49,25 @@ if (location.href.indexOf('youtube') !== -1) {
     // ReactDOM.render(<ButtonDiv />, document.querySelector("#infra-full-container"));
 }
 
-
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    console.log(message.message);
+    // eslint-disable-next-line no-restricted-globals
+    if (message.message === 'retryInject' && location.href.indexOf('youtube') !== -1) {
+        if (!likedBarInjectionFlag) {
+            console.log("second try");
+            if (document.querySelector("ytd-rich-grid-renderer")) {
+                let likedBar=document.createElement('div');
+                likedBar.id="likedBar";
+                likedBar.className="likedBar";
+                document.querySelector("ytd-rich-grid-renderer").insertBefore(likedBar,document.querySelector(".ytd-rich-grid-renderer #contents"));
+                likedBar.style.width="92%";
+                likedBar.style.marginLeft="2vw";
+                ReactDOM.render(<FriendsLikedBar/>, likedBar);
+                likedBarInjectionFlag = true;
+            }
+        }
+    }
+})
 
 console.log("aft");
 

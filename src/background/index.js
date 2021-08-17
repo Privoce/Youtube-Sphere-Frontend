@@ -6,3 +6,13 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         chrome.tabs.create({"url": "https://login.qmcurtis.me/"})
     }
 })
+
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+    if (changeInfo.url) {
+        console.log('url changed.')
+        chrome.tabs.sendMessage( tabId, {
+            message: 'retryInject',
+            url: changeInfo.url
+        })
+    }
+})
