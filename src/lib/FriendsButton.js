@@ -79,12 +79,13 @@ export default function FriendsButton() {
             }
             if (currUser && !open) {
                 getFriendsList(currUser.id).then((response) => {
+                    console.log(response)
                     if (response.status == 200) {
                         return response.data;
                     }
                 }).then((response) => {
-                    if (response.status == 1) {
-                        setFriends(response.users);
+                    if (response) {
+                        setFriends(response);
                         console.log("friends fetched.")
                     }
                 }).catch((err) => {
