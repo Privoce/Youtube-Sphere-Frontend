@@ -30,7 +30,8 @@ if (location.href.indexOf('youtube') !== -1) {
             let likedBar=document.createElement('div');
             likedBar.id="likedBar";
             likedBar.className="likedBar";
-            document.querySelector("ytd-rich-grid-renderer").insertBefore(likedBar,document.querySelector(".ytd-rich-grid-renderer #contents"));
+            let fatherElement = document.querySelector("ytd-rich-grid-renderer")
+            fatherElement.insertBefore(likedBar,document.querySelector("ytd-rich-grid-renderer div.ytd-rich-grid-renderer"));
             likedBar.style.width="92%";
             likedBar.style.marginLeft="2vw";
             ReactDOM.render(<FriendsLikedBar/>, likedBar);
@@ -59,7 +60,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                 let likedBar=document.createElement('div');
                 likedBar.id="likedBar";
                 likedBar.className="likedBar";
-                document.querySelector("ytd-rich-grid-renderer").insertBefore(likedBar,document.querySelector(".ytd-rich-grid-renderer #contents"));
+                let fatherElement = document.querySelector("ytd-rich-grid-renderer")
+                fatherElement.insertBefore(likedBar,document.querySelector("ytd-rich-grid-renderer div.ytd-rich-grid-renderer"));
                 likedBar.style.width="92%";
                 likedBar.style.marginLeft="2vw";
                 ReactDOM.render(<FriendsLikedBar/>, likedBar);
