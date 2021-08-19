@@ -95,4 +95,17 @@ window.addEventListener("message", (event) => {
     }
 })
 
+document.addEventListener('SPHERE_LOGIN', (event) => {
+    chrome.storage.local.set({infraUser: event.detail.user}, (value) => {
+        console.log("infraUser is set to:", value);
+    })
+    infraEvent.emit("statusChange");
+});
+document.addEventListener('SPHERE_LOGOUT', (event) => {
+    chrome.storage.local.set({infraUser: ''}, () => {
+        console.log("infraUser is set to: ");
+    })
+    infraEvent.emit("statusChange");
+})
+
 console.log("added")

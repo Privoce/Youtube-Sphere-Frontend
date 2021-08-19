@@ -68,7 +68,6 @@ export default function SearchButton() {
                 console.log("add friend fatal error, ", err);
             })
         })
-
     }
 
     const renderDialog = () => {
