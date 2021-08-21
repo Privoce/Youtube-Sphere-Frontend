@@ -13,8 +13,9 @@ import React, {useState, useEffect} from "react";
 import SearchIcon from "@material-ui/icons/Search";
 import {createRelation} from "../api/request";
 import {searchAccount, getFriendsList} from "../api/request";
+import {useHistory} from "react-router-dom";
 
-function SearchFriendInput({pullUpSearchResult}) {
+function SearchFriendInput({pullUpSearchResult, onClick}) {
     const [value, setValue] = useState("");
     let inputField = null;
 
@@ -27,34 +28,29 @@ function SearchFriendInput({pullUpSearchResult}) {
                 pullUpSearchResult(response.data);
             }
         })
-        inputField.value = "";
+        setValue("");
+        onClick();
     }
     return (
-        <FormControl fullWidth>
+        <div style={{display: 'flex'}} id="friends-search-bar">
             <Input
+                fullWidth={true}
                 id="search-friends"
                 value={value}
                 placeholder="Search e-mail/phone/name"
                 onChange={handleChange}
-                inputRef={(ref) => inputField = ref}
-                endAdorment={
-                    <InputAdornment position="end">
-                        <IconButton
-                            onClick={handleSearch}
-                        >
-                            <SearchIcon />
-                        </IconButton>
-                    </InputAdornment>
-                }
             />
-        </FormControl>
+            <IconButton onClick={handleSearch}>
+                <SearchIcon />
+            </IconButton>
+        </div>
     )
 }
 
 function SearchModule() {
     const [result, setResult] = useState(null);
     const [anchorEl, setAnchorEl] = useState(null);
-    const open = Boolean(anchorEl);
+    const [open, setOpen] = useState(false)
 
     const profile = {
         avatar: "Avatar: ",
@@ -65,10 +61,13 @@ function SearchModule() {
     }
 
     const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
+        // setAnchorEl(event.currentTarget);
+        setAnchorEl(document.getElementById("friends-search-bar"));
+        setOpen(true);
     }
     const handleClose = () => {
-        setAnchorEl(null);
+        // setAnchorEl(null);
+        setOpen(false);
     }
     const pullUpFriends = (friends) => {
         setResult(friends);
@@ -134,7 +133,7 @@ function SearchModule() {
             <SearchFriendInput pullUpSearchResult={pullUpFriends} onClick={handleClick}/>
             <Popover
                 open={open}
-                anchorEl={anchorEl}
+                anchorEl={document.getElementById("friends-search-bar")}
                 onClose={handleClose}
                 anchorOrigin={{
                     vertical: 'bottom',
@@ -156,6 +155,7 @@ function SearchModule() {
 
 export default function FriendsShow(props) {
     const [friends, setFriends] = useState(null);
+    // const history = useHistory();
 
     const profile = {
         avatar: "Avatar: ",
@@ -163,6 +163,10 @@ export default function FriendsShow(props) {
         mobile: "Mobile: ",
         email: "E-Mail: ",
         logout: "Log Out"
+    }
+
+    const logoutRequest = () => {
+        chrome.runtime.sendMessage({msg: "externalLogin"});
     }
 
     const renderFriends = () => {
@@ -217,11 +221,17 @@ export default function FriendsShow(props) {
             }).catch((err) => {
                 console.log("axios err at getFriendsList", err);
             })
+        } else {
+            console.log("direct to login");
+            // console.log(props);
+            // props.history.push("/login");
         }
+        // if no user: push history /login
     }, [props.user])
 
     return (
         <div>
+            <h2 onClick={logoutRequest}>Logout</h2>
             <SearchModule />
             {renderFriends()}
         </div>

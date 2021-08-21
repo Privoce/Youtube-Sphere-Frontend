@@ -2,7 +2,7 @@
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     console.log(message)
-    if (message == 'externalLogin') {
+    if (message.msg == 'externalLogin') {
         chrome.tabs.create({"url": "https://stage.nicegoodthings.com/"})
     }
 })

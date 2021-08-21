@@ -24,7 +24,7 @@ export default function FriendsLikedBar() {
             if (!currUser) {
                 // eslint-disable-next-line no-restricted-globals
                 if(confirm("You are not logged in. Log in first?")) {
-                    chrome.runtime.sendMessage("externalLogin");
+                    chrome.runtime.sendMessage({msg: "externalLogin"});
                 }
                 return;
             }

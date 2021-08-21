@@ -41,8 +41,10 @@ if (location.href.indexOf('youtube') !== -1) {
 
     let buttonBar=document.createElement('div')
     buttonBar.id='buttonBar'
-    document.getElementById("end").insertBefore(buttonBar,document.getElementById("buttons"))
-    ReactDOM.render(<ButtonBar/>,buttonBar)
+    let fatherDivForButtons = document.querySelector("#info");
+    fatherDivForButtons.insertBefore(buttonBar,fatherDivForButtons.querySelector("#info-contents"));
+    ReactDOM.render(<ReactionButton />,buttonBar);
+    console.log(fatherDivForButtons);
 
     // let floaterDiv = document.createElement("div");
     // floaterDiv.id = "infra-full-container";
@@ -96,16 +98,30 @@ window.addEventListener("message", (event) => {
 })
 
 document.addEventListener('SPHERE_LOGIN', (event) => {
-    chrome.storage.local.set({infraUser: event.detail.user}, (value) => {
-        console.log("infraUser is set to:", value);
+    console.log(event);
+    console.log(event.detail.user)
+    chrome.storage.local.set({infraUser: event.detail.user}, () => {
+        console.log("infraUser is set to:", event.detail.user);
     })
     infraEvent.emit("statusChange");
+    chrome.runtime.sendMessage({
+        msg: "login",
+        user: event.detail.user
+    }, (response) => {
+        console.log(response);
+    })
+    console.log("message sent");
 });
 document.addEventListener('SPHERE_LOGOUT', (event) => {
     chrome.storage.local.set({infraUser: ''}, () => {
         console.log("infraUser is set to: ");
     })
     infraEvent.emit("statusChange");
+    chrome.runtime.sendMessage({
+        msg: "logout"
+    }, (response) => {
+        console.log(response);
+    })
 })
 
 console.log("added")

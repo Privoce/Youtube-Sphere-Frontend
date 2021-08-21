@@ -44,7 +44,7 @@ export default function ReactionButton() {
                 if (!currUser) {
                     // eslint-disable-next-line no-restricted-globals
                     if(confirm("You are not logged in. Log in first?")) {
-                        chrome.runtime.sendMessage("externalLogin");
+                        chrome.runtime.sendMessage({msg: "externalLogin"});
                     }
                     return;
                 }
@@ -60,7 +60,8 @@ export default function ReactionButton() {
 
     return (
         <div
-            style={{position: "fixed", right: "150px", bottom: "50px", zIndex: 996}}
+            style={{zIndex: 996}}
+            id="sphere-search-button"
         >
             <IconButton
                 onMouseEnter={togglePopoverOn}
