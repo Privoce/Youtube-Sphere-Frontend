@@ -33,8 +33,8 @@ export default function LoginTip(props) {
     }, [])
 
     return (
-        <div style={{alignItems: 'center'}}>
-            <Typography variant='h3'>
+        <div style={{alignItems: 'center', width: "100%", height: "100%", textAlign: 'center', position: 'absolute', top: '40%'}} >
+            <Typography variant='h6'>
                 You are not logged in. Log in Now?
             </Typography>
             <Button variant="contained" color="primary" onClick={loginRequest}>Login</Button>

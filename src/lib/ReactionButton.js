@@ -49,7 +49,7 @@ export default function ReactionButton() {
                     return;
                 }
                 if (currUser) {
-                    reactionToVideo(currUser.id,window.location.href,"like",0,0).then((response)=>{
+                    reactionToVideo(currUser.id,window.location.href, event.target.id,0,0).then((response)=>{
                         console.log(response)
                     })
                 }
@@ -90,10 +90,10 @@ export default function ReactionButton() {
                 onClose={togglePopoverOff}
             >
                 <ButtonGroup>
-                    <IconButton children={<ThumbUpIcon />} onClick={handleLike}/>
-                    <IconButton children={<ThumbDownIcon />}/>
-                    <IconButton children={<SentimentVerySatisfiedIcon />}/>
-                    <IconButton children={<SentimentVeryDissatisfiedIcon />}/>
+                    <IconButton id="like" children={<ThumbUpIcon />} onClick={handleLike}/>
+                    <IconButton id="dislike" children={<ThumbDownIcon />} onClick={handleLike}/>
+                    <IconButton id="happy" children={<SentimentVerySatisfiedIcon />} onClick={handleLike}/>
+                    <IconButton id="sad" children={<SentimentVeryDissatisfiedIcon />} onClick={handleLike}/>
                 </ButtonGroup>
             </Popover>
         </div>

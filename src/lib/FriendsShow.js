@@ -166,7 +166,8 @@ export default function FriendsShow(props) {
     }
 
     const logoutRequest = () => {
-        chrome.runtime.sendMessage({msg: "externalLogin"});
+        // chrome.runtime.sendMessage({msg: "externalLogin"});
+        chrome.storage.local.set({infraUser: ''});
     }
 
     const renderFriends = () => {
@@ -230,8 +231,8 @@ export default function FriendsShow(props) {
     }, [props.user])
 
     return (
-        <div>
-            <h2 onClick={logoutRequest}>Logout</h2>
+        <div style={{marginLeft: '10px', marginRight: '10px'}}>
+            <h3 style={{textAlign: 'center'}} onClick={logoutRequest}>Sphere - Private Youtube Social Network</h3>
             <SearchModule />
             {renderFriends()}
         </div>

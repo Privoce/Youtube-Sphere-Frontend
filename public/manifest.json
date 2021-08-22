@@ -1,7 +1,7 @@
 {
-  "name": "Infra - YouTube Social Network",
-  "description": "React to and share YouTube video within your own social network",
-  "version": "21.8.21",
+  "name": "Sphere-Private YouTube Social Feed",
+  "description": "React to and share YouTube video within your private social network",
+  "version": "2021.8.22",
   "manifest_version": 3,
   "permissions": [
     "storage",
@@ -28,7 +28,7 @@
   },
   "content_scripts": [
     {
-      "matches": ["*://*.youtube.com/*", "*://login.qmcurtis.me/*", "*://stage.nicegoodthings.com/*"],
+      "matches": ["*://*.youtube.com/*", "*://stage.nicegoodthings.com/*"],
       "js": ["static/js/content.js"],
       "run_at": "document_end"
     }
