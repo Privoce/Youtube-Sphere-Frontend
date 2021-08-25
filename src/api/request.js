@@ -13,10 +13,10 @@ export function createUserRequest(uuid, nickname='') {
         data: {
             userId: uuid,
             nickname: nickname,
-            liked: ""
         },
         url: '/user'
     });
+    localConfig.baseURL = "https://aws.nicegoodthings.com/";
     return axios.request(localConfig);
 }
 export function createRelation(requestStarterUUID, requestOriginUUID) {

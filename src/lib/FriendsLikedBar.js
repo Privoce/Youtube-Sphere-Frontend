@@ -4,6 +4,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import {Card, CardActionArea, CardActions, CardContent, CardMedia,Grid} from "@material-ui/core";
 import {getFriendLiked} from "../api/request"
 import {Typography} from "@material-ui/core";
+import {infraEvent} from "./helper";
 
 let useStyles = makeStyles((theme) => ({
     root: {
@@ -40,6 +41,24 @@ export default function FriendsLikedBar() {
                     console.log("axios err at getFriendsList", err);
                 })
             }
+        })
+        chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+            // console.log(message);
+            if (message.msg == "login") {
+                getFriendLiked(message.user.id).then((response) => {
+                    if (response.data) {
+                        setLiked(response.data);
+                        // return response.data.friendsLiked;
+                    }
+                    console.log(liked)
+                }).catch((err) => {
+                    console.log("axios err at getFriendsList", err);
+                })
+                sendResponse("received");
+            } else if (message.msg == "logout") {
+                sendResponse("received");
+            }
+            return true;
         })
     }, [])
 
