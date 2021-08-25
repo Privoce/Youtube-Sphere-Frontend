@@ -3,7 +3,7 @@
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     console.log(message)
     if (message.msg == 'externalLogin') {
-        chrome.tabs.create({"url": "https://stage.nicegoodthings.com/"})
+        chrome.tabs.create({"url": "https://nicegoodthings.com/transfer/user/sphere "})
     }
 })
 

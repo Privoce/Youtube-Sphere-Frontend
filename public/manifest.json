@@ -1,7 +1,7 @@
 {
   "name": "Sphere-Private YouTube Social Feed",
   "description": "React to and share YouTube video within your private social network",
-  "version": "2021.8.22",
+  "version": "2021.8.24",
   "manifest_version": 3,
   "permissions": [
     "storage",
@@ -28,7 +28,7 @@
   },
   "content_scripts": [
     {
-      "matches": ["*://*.youtube.com/*", "*://stage.nicegoodthings.com/*"],
+      "matches": ["*://*.youtube.com/*", "*://nicegoodthings.com/*"],
       "js": ["static/js/content.js"],
       "run_at": "document_end"
     }

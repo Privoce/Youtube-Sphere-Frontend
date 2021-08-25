@@ -6,6 +6,7 @@ import FriendsButton from "../lib/FriendsButton";
 import SearchButton from "../lib/SearchButton";
 import FriendsLikedBar from "../lib/FriendsLikedBar";
 import ReactionButton from "../lib/ReactionButton";
+import {createUserRequest} from "../api/request";
 import ButtonBar from "../lib/ButtonBar";
 
 
@@ -102,6 +103,10 @@ document.addEventListener('SPHERE_LOGIN', (event) => {
     console.log(event.detail.user)
     chrome.storage.local.set({infraUser: event.detail.user}, () => {
         console.log("infraUser is set to:", event.detail.user);
+        const currUser = event.detail.user;
+        createUserRequest(currUser.id,currUser.nickname??currUser.username).then((response)=>{
+            console.log(response.data)
+        })
     })
     infraEvent.emit("statusChange");
     chrome.runtime.sendMessage({
