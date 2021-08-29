@@ -8,7 +8,7 @@ import {infraEvent} from "./helper";
 
 let useStyles = makeStyles((theme) => ({
     root: {
-        maxWidth: 260,
+        // maxWidth: 260,
     },
     content:{
     }
@@ -84,13 +84,12 @@ export default function FriendsLikedBar() {
             <Grid container direction="row" alignItems="center" justifyContent="flex-start" spacing={2}>
                 {
                     liked.map((item)=>(
-                        <Grid item>
+                        <Grid item sm={6} md={3} >
                             <Card className={classes.root}>
                                 <CardActionArea onClick={handleClick.bind(this,item.videoUrl)}>
                                     <CardMedia
                                         component="img"
                                         alt="Contemplative Reptile"
-                                        height="170"
                                         image={item.videoThumbnail}
                                         title={item.videoTitle}
                                     />
