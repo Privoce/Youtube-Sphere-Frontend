@@ -47,8 +47,8 @@ let reactionButtonTimeOut = setInterval(() => {
                 likedBar.className="likedBar";
                 let fatherElement = document.querySelector("ytd-rich-grid-renderer")
                 fatherElement.insertBefore(likedBar,document.querySelector("ytd-rich-grid-renderer div.ytd-rich-grid-renderer#masthead-ad"));
-                likedBar.style.width="92%";
-                likedBar.style.marginLeft="2vw";
+                likedBar.style.width="93%";
+                // likedBar.style.marginLeft="2vw";
                 ReactDOM.render(<FriendsLikedBar/>, likedBar);
                 likedBarInjectionFlag = true;
             }
