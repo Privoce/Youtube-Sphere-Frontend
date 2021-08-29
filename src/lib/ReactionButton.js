@@ -1,12 +1,13 @@
 /* global chrome */
-import React, {useState, useEffect} from "react";
-import {IconButton, Popover, ButtonGroup, Button, Icon} from "@material-ui/core";
+import React, {useState, useEffect, useMemo} from "react";
+import {IconButton, Popover, ButtonGroup, Button, Icon, Snackbar, useMediaQuery} from "@material-ui/core";
 import WifiTetheringIcon from '@material-ui/icons/WifiTethering';
 import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import ThumbDownIcon from "@material-ui/icons/ThumbDown";
+import CloseIcon from "@material-ui/icons/Close";
 import SentimentVeryDissatisfiedIcon from '@material-ui/icons/SentimentVeryDissatisfied';
 import SentimentVerySatisfiedIcon from '@material-ui/icons/SentimentVerySatisfied';
-import {makeStyles} from "@material-ui/core/styles";
+import {makeStyles, createTheme, ThemeProvider} from "@material-ui/core/styles";
 import {getFriendLiked, reactionToVideo} from "../api/request";
 
 const useStyle = makeStyles((theme) => ({
@@ -21,7 +22,18 @@ const useStyle = makeStyles((theme) => ({
 export default function ReactionButton() {
     const classes = useStyle();
     const [anchorEl, setAnchorEl] = useState(null);
-    const [open, setOpen] = useState(false)
+    const [open, setOpen] = useState(false);
+    const [snackBarOpen, setSnackBarOpen] = useState(false);
+    const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+
+    const theme = useMemo(
+        () => createTheme({
+            palette: {
+                type: prefersDarkMode ? 'dark' : 'light',
+            }
+        }),
+        [prefersDarkMode],
+    );
 
     const togglePopoverOn = (event) => {
         if (!anchorEl) {
@@ -35,8 +47,15 @@ export default function ReactionButton() {
     const continuePopover = () => {
         setOpen(true);
     }
+    const handleSnackBarClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
 
-    const handleLike = (event)=>{
+        setSnackBarOpen(false);
+    }
+
+    const handleLike = (reactionType) => (event) => {
         let url=window.location.href
         if (url.indexOf("watch")!==-1){
             chrome.storage.local.get(["infraUser"], (result) => {
@@ -49,8 +68,11 @@ export default function ReactionButton() {
                     return;
                 }
                 if (currUser) {
-                    reactionToVideo(currUser.id,window.location.href, event.target.id,0,0).then((response)=>{
+                    reactionToVideo(currUser.id,window.location.href, reactionType,0,0).then((response)=>{
                         console.log(response)
+                        if (response.status == 200) {
+                            setSnackBarOpen(true);
+                        }
                     })
                 }
             })
@@ -63,39 +85,59 @@ export default function ReactionButton() {
             style={{zIndex: 996}}
             id="sphere-search-button"
         >
-            <IconButton
-                onMouseEnter={togglePopoverOn}
-                onMouseLeave={togglePopoverOff}
-            >
-                <WifiTetheringIcon />
-            </IconButton>
-            <Popover
-                onMouseEnter={continuePopover}
-                onMouseLeave={togglePopoverOff}
-                id="hover-reaction-bar"
-                className={classes.popover}
-                classes={{
-                    paper: classes.paper,
-                }}
-                open={open}
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'left'
-                }}
-                transformOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'left'
-                }}
-                onClose={togglePopoverOff}
-            >
-                <ButtonGroup>
-                    <IconButton id="like" children={<ThumbUpIcon />} onClick={handleLike}/>
-                    <IconButton id="dislike" children={<ThumbDownIcon />} onClick={handleLike}/>
-                    <IconButton id="happy" children={<SentimentVerySatisfiedIcon />} onClick={handleLike}/>
-                    <IconButton id="sad" children={<SentimentVeryDissatisfiedIcon />} onClick={handleLike}/>
-                </ButtonGroup>
-            </Popover>
+            <ThemeProvider theme={theme}>
+                <IconButton
+                    onMouseEnter={togglePopoverOn}
+                    onMouseLeave={togglePopoverOff}
+                >
+                    <WifiTetheringIcon />
+                </IconButton>
+                <Popover
+                    onMouseEnter={continuePopover}
+                    onMouseLeave={togglePopoverOff}
+                    id="hover-reaction-bar"
+                    className={classes.popover}
+                    classes={{
+                        paper: classes.paper,
+                    }}
+                    open={open}
+                    anchorEl={anchorEl}
+                    anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'left'
+                    }}
+                    transformOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'left'
+                    }}
+                    onClose={togglePopoverOff}
+                >
+                    <ButtonGroup>
+                        <IconButton id="like" children={<ThumbUpIcon />} onClick={handleLike("like")}/>
+                        <IconButton id="dislike" children={<ThumbDownIcon />} onClick={handleLike("dislike")}/>
+                        <IconButton id="happy" children={<SentimentVerySatisfiedIcon />} onClick={handleLike("happy")}/>
+                        <IconButton id="sad" children={<SentimentVeryDissatisfiedIcon />} onClick={handleLike("sad")}/>
+                    </ButtonGroup>
+                </Popover>
+                <Snackbar
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'left',
+                    }}
+                    open={snackBarOpen}
+                    autoHideDuration={6000}
+                    onClose={handleSnackBarClose}
+                    message="Reaction Succeeded"
+                    action={
+                        <>
+                            <IconButton size="small" aria-label="close" color="inherit" onClick={handleSnackBarClose}>
+                                <CloseIcon fontSize="small" />
+                            </IconButton>
+                        </>
+                    }
+                />
+            </ThemeProvider>
+
         </div>
 
     )

@@ -1,14 +1,14 @@
 /* global chrome */
-import React, {useEffect, useState} from 'react';
-import {makeStyles} from '@material-ui/core/styles';
-import {Card, CardActionArea, CardActions, CardContent, CardMedia,Grid} from "@material-ui/core";
+import React, {useEffect, useMemo, useState} from 'react';
+import {createTheme, makeStyles} from '@material-ui/core/styles';
+import {Card, CardActionArea, CardActions, CardContent, CardMedia, Grid, useMediaQuery} from "@material-ui/core";
 import {getFriendLiked} from "../api/request"
-import {Typography} from "@material-ui/core";
+import {Typography, ThemeProvider} from "@material-ui/core";
 import {infraEvent} from "./helper";
 
 let useStyles = makeStyles((theme) => ({
     root: {
-        maxWidth: 320,
+        maxWidth: 260,
     },
     content:{
     }
@@ -17,6 +17,16 @@ let useStyles = makeStyles((theme) => ({
 export default function FriendsLikedBar() {
     const classes = useStyles();
     const [liked, setLiked] = useState(null);
+    const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+
+    const theme = useMemo(
+        () => createTheme({
+            palette: {
+                type: prefersDarkMode ? 'dark' : 'light',
+            }
+        }),
+        [prefersDarkMode],
+    );
 
     useEffect(() => {
         console.log("useEffect start")
@@ -44,7 +54,7 @@ export default function FriendsLikedBar() {
         })
         chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             // console.log(message);
-            if (message.msg == "login") {
+            if (message.message == "login") {
                 getFriendLiked(message.user.id).then((response) => {
                     if (response.data) {
                         setLiked(response.data);
@@ -55,7 +65,7 @@ export default function FriendsLikedBar() {
                     console.log("axios err at getFriendsList", err);
                 })
                 sendResponse("received");
-            } else if (message.msg == "logout") {
+            } else if (message.message == "logout") {
                 sendResponse("received");
             }
             return true;
@@ -67,8 +77,11 @@ export default function FriendsLikedBar() {
     }
 
     return (
-        liked ?
-            <Grid container direction="row" alignItems="center" justifyContent="flex-start" spacing={4}>
+        <>
+            <div style={{height: '64px'}}></div>
+            <ThemeProvider theme={theme}>
+            {liked ?
+            <Grid container direction="row" alignItems="center" justifyContent="flex-start" spacing={2}>
                 {
                     liked.map((item)=>(
                         <Grid item>
@@ -95,6 +108,9 @@ export default function FriendsLikedBar() {
                     ))
                 }
             </Grid> :
-            <Typography variant="body1">no friends info</Typography>
+            <Typography variant="body1">no friends info</Typography>}
+            </ThemeProvider>
+        </>
+
     )
 }

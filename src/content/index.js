@@ -21,37 +21,44 @@ function ButtonDiv() {
 }
 
 let likedBarInjectionFlag = false;
+let reactionButtonFlag = false;
 
 
-// eslint-disable-next-line no-restricted-globals
-if (location.href.indexOf('youtube') !== -1) {
-    if (!likedBarInjectionFlag) {
-        console.log("first try");
-        if (document.querySelector("ytd-rich-grid-renderer")) {
-            let likedBar=document.createElement('div');
-            likedBar.id="likedBar";
-            likedBar.className="likedBar";
-            let fatherElement = document.querySelector("ytd-rich-grid-renderer")
-            fatherElement.insertBefore(likedBar,document.querySelector("ytd-rich-grid-renderer div.ytd-rich-grid-renderer"));
-            likedBar.style.width="92%";
-            likedBar.style.marginLeft="2vw";
-            ReactDOM.render(<FriendsLikedBar/>, likedBar);
-            likedBarInjectionFlag = true;
+let reactionButtonTimeOut = setInterval(() => {
+    if (!reactionButtonFlag) {
+        let buttonBar=document.createElement('div');
+        buttonBar.id='buttonBar'
+        let fatherDivForButtons = document.querySelector("div.ytd-video-primary-info-renderer#container div#info");
+        if (fatherDivForButtons) {
+            fatherDivForButtons.insertBefore(buttonBar,fatherDivForButtons.querySelector("#menu-container"));
+            ReactDOM.render(<ReactionButton />,buttonBar);
+            console.log(fatherDivForButtons);
+            reactionButtonFlag = true;
         }
     }
 
-    let buttonBar=document.createElement('div')
-    buttonBar.id='buttonBar'
-    let fatherDivForButtons = document.querySelector("#info");
-    fatherDivForButtons.insertBefore(buttonBar,fatherDivForButtons.querySelector("#info-contents"));
-    ReactDOM.render(<ReactionButton />,buttonBar);
-    console.log(fatherDivForButtons);
+    // eslint-disable-next-line no-restricted-globals
+    if (location.href.indexOf('youtube') !== -1) {
+        if (!likedBarInjectionFlag) {
+            console.log("first try");
+            if (document.querySelector("ytd-rich-grid-renderer")) {
+                let likedBar=document.createElement('div');
+                likedBar.id="likedBar";
+                likedBar.className="likedBar";
+                let fatherElement = document.querySelector("ytd-rich-grid-renderer")
+                fatherElement.insertBefore(likedBar,document.querySelector("ytd-rich-grid-renderer div.ytd-rich-grid-renderer#masthead-ad"));
+                likedBar.style.width="92%";
+                likedBar.style.marginLeft="2vw";
+                ReactDOM.render(<FriendsLikedBar/>, likedBar);
+                likedBarInjectionFlag = true;
+            }
+        }
+    }
+}, 500);
 
-    // let floaterDiv = document.createElement("div");
-    // floaterDiv.id = "infra-full-container";
-    // document.querySelector("body").appendChild(floaterDiv);
-    // ReactDOM.render(<ButtonDiv />, document.querySelector("#infra-full-container"));
-}
+setTimeout(() => {
+    clearInterval(reactionButtonTimeOut);
+}, 36000)
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     console.log(message.message);
@@ -64,12 +71,32 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                 likedBar.id="likedBar";
                 likedBar.className="likedBar";
                 let fatherElement = document.querySelector("ytd-rich-grid-renderer")
-                fatherElement.insertBefore(likedBar,document.querySelector("ytd-rich-grid-renderer div.ytd-rich-grid-renderer"));
+                fatherElement.insertBefore(likedBar,document.querySelector("ytd-rich-grid-renderer div.ytd-rich-grid-renderer#masthead-ad"));
                 likedBar.style.width="92%";
                 likedBar.style.marginLeft="2vw";
                 ReactDOM.render(<FriendsLikedBar/>, likedBar);
                 likedBarInjectionFlag = true;
             }
+        }
+
+        if (!reactionButtonFlag) {
+            let reactionButtonTimeOut = setInterval(() => {
+                if (!reactionButtonFlag) {
+                    let buttonBar=document.createElement('div');
+                    buttonBar.id='buttonBar'
+                    let fatherDivForButtons = document.querySelector("div.ytd-video-primary-info-renderer#container div#info");
+                    if (fatherDivForButtons) {
+                        fatherDivForButtons.insertBefore(buttonBar,fatherDivForButtons.querySelector("#menu-container"));
+                        ReactDOM.render(<ReactionButton />,buttonBar);
+                        console.log(fatherDivForButtons);
+                        reactionButtonFlag = true;
+                    }
+                }
+            }, 500);
+
+            setTimeout(() => {
+                clearInterval(reactionButtonTimeOut);
+            }, 36000)
         }
     }
 })

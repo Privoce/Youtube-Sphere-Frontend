@@ -1,9 +1,12 @@
 /* global chrome */
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useMemo} from 'react';
 import LoginTip from "../lib/LoginTip";
 import FriendsShow from "../lib/FriendsShow";
 import {HashRouter, Route, Link, Switch, Redirect} from 'react-router-dom';
+import {createTheme, ThemeProvider} from "@material-ui/core/styles";
+import {Paper, Container} from "@material-ui/core";
 import "./index.css";
+import {useMediaQuery} from "@material-ui/core";
 
 function RoutedLoginTip({to, user}) {
     return (
@@ -32,6 +35,16 @@ function RoutedFriendsShow({to, user}) {
 
 export default function Popup() {
     const [user, setUser] = useState(null);
+    const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+
+    const theme = useMemo(
+        () => createTheme({
+            palette: {
+                type: prefersDarkMode ? 'dark' : 'light',
+            }
+        }),
+        [prefersDarkMode],
+    );
 
     useEffect(() => {
         chrome.storage.local.get(["infraUser"], (result) => {
@@ -58,8 +71,8 @@ export default function Popup() {
     }, [])
 
     return (
-        <React.Fragment>
-            {user ? <FriendsShow user={user} /> : <LoginTip user={user} />}
-        </React.Fragment>
+            <Container>
+                {user ? <FriendsShow user={user} /> : <LoginTip user={user} />}
+            </Container>
     )
 }
