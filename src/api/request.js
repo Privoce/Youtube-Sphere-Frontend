@@ -59,7 +59,8 @@ export function searchAccount(text) {
 export function getFriendLiked(userId){
     let localConfig = Object.assign({}, config, {
         params: {
-            userId:userId
+            userId: userId,
+            num: 12
         },
         url: '/user/connect/liked'
     });

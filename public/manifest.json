@@ -1,7 +1,7 @@
 {
   "name": "Sphere-Private YouTube Social Feed",
   "description": "React to and share YouTube video within your private social network",
-  "version": "2021.8.29",
+  "version": "2021.8.30",
   "manifest_version": 3,
   "permissions": [
     "storage",
