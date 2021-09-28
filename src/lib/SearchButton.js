@@ -59,11 +59,7 @@ export default function SearchButton() {
                     return response.data
                 }
             }).then((response) => {
-                if (response.status == 1) {
-                    alert("Adding Friend Successfully!");
-                } else {
-                    alert(response.errMsg);
-                }
+                alert("Adding Friend Successfully!");
             }).catch((err) => {
                 console.log("add friend fatal error, ", err);
             })

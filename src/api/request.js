@@ -16,21 +16,17 @@ export function createUserRequest(uuid, nickname='') {
         },
         url: '/user'
     });
-    localConfig.baseURL = "https://aws.nicegoodthings.com/";
     return axios.request(localConfig);
 }
 export function createRelation(requestStarterUUID, requestOriginUUID) {
     let localConfig = Object.assign({}, config, {
         data: {
-            userId: requestStarterUUID,
-            users: [
-                requestOriginUUID
-            ],
+            meId: requestStarterUUID,
+            friendId: requestOriginUUID,
             platform: 'youtube'
         },
         url: '/user/connect'
     });
-    localConfig.baseURL = "https://aws.nicegoodthings.com/"
     console.log(localConfig);
     return axios.request(localConfig);
 }
@@ -39,7 +35,7 @@ export function getFriendsList(uuid) {
         params: {
             userId: uuid,
         },
-        url: '/authing/connect/'
+        url: '/user/connect/'
     });
     localConfig.method = 'get'
     console.log(localConfig);
@@ -68,17 +64,15 @@ export function getFriendLiked(userId){
     localConfig.method = 'get'
     return axios.request(localConfig);
 }
-export function reactionToVideo(uuid, url, reactionType='like', timeStamp, keepPrivate) {
+export function reactionToVideo(uuid, url, reactionType='like', timeStamp, keepPrivate=false) {
     let localConfig = Object.assign({}, config, {
         data: {
             userId: uuid,
-            url: url,
-            reaction: reactionType,
-            timeStamp: timeStamp,
-            keepPrivate: keepPrivate,
+            videoId: url,
+            reactiontime: timeStamp,
+            datetime: "2021-09-27 13:00:00"
         },
-        url: '/reaction'
+        url: '/user/connect/liked'
     });
-    localConfig.method='post'
     return axios.request(localConfig);
 }

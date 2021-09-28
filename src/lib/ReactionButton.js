@@ -68,7 +68,8 @@ export default function ReactionButton() {
                     return;
                 }
                 if (currUser) {
-                    reactionToVideo(currUser.id,window.location.href, reactionType,0,0).then((response)=>{
+                    const currentUrl = new URL(window.location.href);
+                    reactionToVideo(currUser.id, currentUrl.searchParams.get("v"), reactionType,0,0).then((response)=>{
                         console.log(response)
                         if (response.status == 200) {
                             setSnackBarOpen(true);

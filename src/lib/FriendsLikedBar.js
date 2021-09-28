@@ -42,6 +42,7 @@ export default function FriendsLikedBar() {
             if (currUser) {
                 //获取好友喜欢的列表
                 getFriendLiked(currUser.id).then((response) => {
+                    console.log(response.data)
                     if (response.data) {
                         setLiked(response.data);
                         // return response.data.friendsLiked;
@@ -86,7 +87,7 @@ export default function FriendsLikedBar() {
                     liked.map((item)=>(
                         <Grid item sm={6} md={3} >
                             <Card className={classes.root}>
-                                <CardActionArea onClick={handleClick.bind(this,item.videoUrl)}>
+                                <CardActionArea onClick={handleClick.bind(this,"https://youtube.com/watch?v=" + item.videoId)}>
                                     <CardMedia
                                         component="img"
                                         alt="Contemplative Reptile"
@@ -98,7 +99,7 @@ export default function FriendsLikedBar() {
                                             {item.videoTitle}
                                         </Typography>
                                         <Typography variant="body2" color="textSecondary" component="p">
-                                            liked by: {<Typography variant="subtitle2">{item.nickname.toString()}</Typography>}
+                                            liked by: {<Typography variant="subtitle2">{[...new Set(item.userList)].toString()}</Typography>}
                                         </Typography>
                                     </CardContent>
                                 </CardActionArea>
